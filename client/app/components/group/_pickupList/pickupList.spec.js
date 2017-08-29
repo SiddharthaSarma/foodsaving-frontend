@@ -7,6 +7,7 @@ describe("PickupList", () => {
 
   beforeEach(() => {
     module(PickupListModule);
+    module({ translateFilter: (a) => a });
     inject(($injector) => {
       $log = $injector.get("$log");
       $log.reset();
@@ -241,10 +242,29 @@ describe("PickupList", () => {
     it("pickupEditCreate dialog is called and updates pickup list", () => {
       $ctrl.allPickups = [];
       sinon.stub($ctrl.$mdDialog, "show");
-      $ctrl.$mdDialog.show.returns($q.resolve({ "collector_ids": [] }));
-      $ctrl.openCreatePickupPanel();
+      let pickup = { id: 5, description: "bla" };
+      $ctrl.allPickups = [pickup];
+      $ctrl.$mdDialog.show.returns($q.resolve({ id: 5, description: "har" }));
+      $ctrl.openEditPickupPanel({}, pickup);
       $rootScope.$apply();
-      expect($ctrl.allPickups).to.deep.equal([{ "collector_ids": [] }]);
+      expect($ctrl.allPickups).to.deep.equal([{ id: 5, description: "har" }]);
+      // should keep reference and replace content via angular.copy
+      expect(pickup).to.deep.equal({ id: 5, description: "har" });
+    });
+  });
+
+  describe("Component", () => {
+    let $compile, scope;
+    beforeEach(inject(($rootScope, $injector) => {
+      $compile = $injector.get("$compile");
+      scope = $rootScope.$new();
+    }));
+
+    it("compiles component", () => {
+      inject((PickupDate, $q) => {
+        sinon.stub(PickupDate, "listByGroupId").returns($q.resolve([]));
+      });
+      $compile("<pickup-list options='{}' group-id='5'></pickup-list>")(scope);
     });
   });
 });

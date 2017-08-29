@@ -9,3 +9,8 @@ TESTS*.xml
 coverage
 .env
 nbproject/
+.vscode
+.idea/
+
+# To do: commit again after npm has been fixed
+package-lock.json

@@ -33,10 +33,12 @@
     "JOIN": "Unisciti",
     "LEAVE": "Leave",
     "PREVIEW": "Preview",
-    "BACK": "Back"
+    "BACK": "Back",
+    "MORE_OPTIONS": "More options"
   },
   "FORM": {
-    "MINLENGTH": "Please enter more than {{min}} characters."
+    "MINLENGTH": "Please enter more than {{min}} characters.",
+    "UNIQUE": "Name already exists, please choose another."
   },
   "GROUP": {
     "LEAVE": "Lascia il gruppo...",
@@ -54,7 +56,12 @@
     "HISTORY": "History",
     "DESCRIPTION": "Description",
     "ADDRESS": "Address",
-    "TIMEZONE": "Time zone of group"
+    "TIMEZONE": "Time zone of group",
+    "INVITE_EMAIL": "Enter an e-mail address",
+    "INVITE_SEND": "Send invitation",
+    "INVITED_LIST": "Invitations have already been sent out to these e-mail addresses:",
+    "ALREADY_INVITED": "An invitation has already been sent to this e-mail address",
+    "INVITE_TITLE": "Invite users to your group"
   },
   "STOREDETAIL": {
     "EDIT": "Modifica negozi",
@@ -99,7 +106,9 @@
     "NO_PUBLIC_DESCRIPTION": "(Questo grupp non ha una pubblica descrizione... per ora)",
     "PASSWORD_LABEL": "Immetti la password per un gruppo privato",
     "PASSWORD_REQUIRED": "Questo gruppo necessita una password",
-    "PASSWORD_WRONG": "Hai digitato la password errata"
+    "PASSWORD_WRONG": "Hai digitato la password errata",
+    "ALL_GROUPS": "All groups",
+    "SIGNUP_OR_LOGIN": "Log in or sign up to join this group!"
   },
   "GROUPINFO": {
     "META": "Show public group information",
@@ -143,7 +152,8 @@
     "HINT_MULTIPLE": "You can select multiple days here, e.g. by holding the Ctrl key.",
     "TIME": "Tempo",
     "TIME_ERROR": "Metti una ora valida: {{timeExample}}",
-    "MAX_COLLECTORS": "Spazio massimo"
+    "MAX_COLLECTORS": "Spazio massimo",
+    "COMMENT": "Additional information"
   },
   "CREATESTORE": {
     "TITLE": "Crea un nuovo negozio"
@@ -198,8 +208,21 @@
     "SERIES_MODIFY": "changed the settings of a recurring pick-up",
     "SERIES_DELETE": "deleted a recurring pick-up",
     "PICKUP_DONE": "did a pick-up at {{store_name}}",
+    "PICKUP_MISSED": "A pickup at {{store_name}} was missed!",
     "PICKUP_JOIN": "signed up to do a pick-up at {{store_name}}",
-    "PICKUP_LEAVE": "stepped back from doing a pick-up at {{store_name}}"
+    "PICKUP_LEAVE": "stepped back from doing a pick-up at {{store_name}}",
+    "LOAD_MORE": "load more ...",
+    "ALL_LOADED": "All entries loaded.",
+    "STORES": "Stores",
+    "USERS": "Users",
+    "TYPE": "Type",
+    "SELECT_ALL": "Select all",
+    "SELECT_NONE": "Select none",
+    "TYPES": {
+      "GROUPS": "Group related",
+      "STORES": "Store related",
+      "PICKUPS": "Pick-up related"
+    }
   },
   "NOTIFICATIONS": {
     "TITLE": "Notifications",

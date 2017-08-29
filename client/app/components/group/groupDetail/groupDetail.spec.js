@@ -9,6 +9,10 @@ describe("GroupDetail", () => {
     $stateProvider
       .state("main", { url: "", abstract: true });
   }));
+  beforeEach(module({ translateFilter: (a) => a }));
+  beforeEach(module(($mdAriaProvider) => {
+    $mdAriaProvider.disableWarnings();
+  }));
 
   beforeEach(inject(($injector) => {
     $log = $injector.get("$log");
@@ -20,6 +24,7 @@ describe("GroupDetail", () => {
 
   beforeEach(inject(($injector) => {
     $httpBackend = $injector.get("$httpBackend");
+    $httpBackend.whenGET("/api/stores/").respond([]);
   }));
 
   afterEach(() => {
@@ -34,45 +39,11 @@ describe("GroupDetail", () => {
   });
 
   describe("Controller", () => {
-    let $componentController, $q, SessionUser;
+    let $componentController;
 
     beforeEach(inject(($injector) => {
       $componentController = $injector.get("$componentController");
-      $q = $injector.get("$q");
-
-      SessionUser = $injector.get("SessionUser");
     }));
-
-    it("should be able to leave a group", () => {
-      let $ctrl = $componentController("groupDetail", {});
-      let groupData = { id: 9834 };
-      sinon.stub($ctrl.$mdDialog, "show");
-      sinon.stub($ctrl.$state, "go");
-      $ctrl.$mdDialog.show.returns($q.resolve());
-      SessionUser.value = { id: 1 };
-      $httpBackend.expectPOST(`/api/groups/${groupData.id}/leave/`).respond(200);
-      sinon.stub($ctrl.CurrentGroup, "persistCurrentGroup");
-      $ctrl.CurrentGroup.set({ id: groupData.id });
-      expect($ctrl.CurrentGroup.value).to.deep.equal({ id: groupData.id });
-      Object.assign($ctrl, { groupData });
-      $ctrl.leaveGroup();
-      $httpBackend.flush();
-      expect($ctrl.CurrentGroup.value).to.deep.equal({});
-      expect($ctrl.$state.go).to.have.been.calledWith("home");
-    });
-
-    it("stays on page if leaving fails", () => {
-      let $ctrl = $componentController("groupDetail", {});
-      let groupData = { id: 98238 };
-      sinon.stub($ctrl.$state, "go");
-      sinon.stub($ctrl.$mdDialog, "show");
-      $ctrl.$mdDialog.show.returns($q.resolve());
-      $httpBackend.expectPOST(`/api/groups/${groupData.id}/leave/`).respond(400);
-      Object.assign($ctrl, { groupData });
-      $ctrl.leaveGroup();
-      $httpBackend.flush();
-      expect($ctrl.$state.go).to.not.have.been.calledWith("home");
-    });
 
     it("highlights correct tab", () => {
       let groupData = { id: 667, name: "blarb" };
@@ -80,7 +51,21 @@ describe("GroupDetail", () => {
       $ctrl.$state.current.name = "group.groupDetail.pickups";
       $ctrl.groupData = groupData;
       $ctrl.$onInit();
+      $httpBackend.flush();
       expect($ctrl.currentNavItem).to.equal("pickups");
+    });
+  });
+
+  describe("Component", () => {
+    let $compile, scope;
+    beforeEach(inject(($rootScope, $injector) => {
+      $compile = $injector.get("$compile");
+      scope = $rootScope.$new();
+    }));
+
+    it("compiles component", () => {
+      $compile("<group-detail></group-detail>")(scope);
+      $httpBackend.flush();
     });
   });
 });

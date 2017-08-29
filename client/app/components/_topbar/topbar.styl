@@ -1,16 +1,17 @@
 topbar
   > md-toolbar
-    height 42px
-    max-height 42px
-    min-height 42px
     margin-bottom 15px
   a.no-transform
     text-transform none
     margin 0
 
-@media screen and (max-width: 600px)
-  topbar > md-toolbar
-    margin-bottom 0
+  @media screen and (max-width: 600px)
+    height 42px
+    width 100%
+    display inline-block
+    .logged-in
+      position fixed
+      z-index 99
 
 .breadcrumb
   color grey

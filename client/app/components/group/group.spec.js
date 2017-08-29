@@ -1,7 +1,4 @@
 import GroupDetailModule from "./group";
-import GroupDetailController from "./group.controller";
-import GroupDetailComponent from "./group.component";
-import GroupDetailTemplate from "./group.html";
 
 const { module } = angular.mock;
 
@@ -9,11 +6,16 @@ describe("Group", () => {
   let $httpBackend, $state;
 
   beforeEach(module(GroupDetailModule));
-  beforeEach(module({ $translate: sinon.stub() }));
+  beforeEach(module({
+    $translate: sinon.stub(),
+    translateFilter: (a) => a
+  }));
   beforeEach(module(($stateProvider) => {
     $stateProvider
       .state("main", { url: "", abstract: true })
-      .state("groupInfo", { parent: "main", url: "groupInfo" });
+      .state("groupInfo", { parent: "main", url: "groupInfo" })
+      .state("login", { url: "login" })
+      .state("notFound", { url: "not-found" });
   }));
 
   let $log;
@@ -33,19 +35,6 @@ describe("Group", () => {
   afterEach(() => {
     $httpBackend.verifyNoOutstandingExpectation();
     $httpBackend.verifyNoOutstandingRequest();
-  });
-
-  describe("Component", () => {
-    let component = GroupDetailComponent;
-
-    it("includes the intended template",() => {
-      expect(component.template).to.equal(GroupDetailTemplate);
-    });
-
-    it("invokes the right controller", () => {
-      expect(component.controller).to.equal(GroupDetailController);
-    });
-
   });
 
   describe("Controller", () => {
@@ -82,20 +71,53 @@ describe("Group", () => {
       });
     });
 
-    it("loads group information & redirects to substate", () => {
+    it("loads group information & redirects to substate", inject((Authentication, $q) => {
+      sinon.stub(Authentication, "update").returns($q.resolve({ id: 43 }));
       let groupData = { id: 12, members: [43] };
       $httpBackend.whenGET(`/api/groups/${groupData.id}/`).respond(groupData);
-      $state.go("group", { groupId: groupData.id });
+      expect($state.go("group", { groupId: groupData.id })).to.be.fulfilled;
       $httpBackend.flush();
       expect($state.current.name).to.equal("group.groupDetail.pickups");
-    });
+    }));
 
-    it("redirects to group info if user is not in group", () => {
+    it("redirects to groupInfo if user is not in group", inject((Authentication, $q) => {
+      // ignore error log
+      $state.defaultErrorHandler(() => {});
+
+      sinon.stub(Authentication, "update").returns($q.resolve({ id: 43 }));
       let groupData = { id: 13, members: [234] };
       $httpBackend.whenGET(`/api/groups/${groupData.id}/`).respond(groupData);
       $state.go("group", { groupId: groupData.id });
       $httpBackend.flush();
       expect($state.current.name).to.equal("groupInfo");
+    }));
+
+    it("redirects to login if logged out", () => {
+      $httpBackend.expectGET("/api/auth/status/").respond(403, { error: "not_authed" });
+      $state.go("group", { groupId: 13 });
+      $httpBackend.flush();
+      expect($state.current.name).to.equal("login");
+    });
+
+    it("redirects to notFound correctly", () => {
+      $httpBackend.whenGET("/api/groups/12/").respond(404, {  });
+      $state.go("group", { groupId: 12 });
+      $httpBackend.flush();
+      expect($state.current.name).to.equal("notFound");
+    });
+  });
+
+  describe("Component", () => {
+    let $compile, scope;
+    beforeEach(inject(($rootScope, $injector, User, Store, $q) => {
+      $compile = $injector.get("$compile");
+      scope = $rootScope.$new();
+      sinon.stub(User, "list").returns($q.resolve([]));
+      sinon.stub(Store, "listByGroupId").returns($q.resolve([]));
+    }));
+
+    it("compiles component", () => {
+      $compile("<group></group>")(scope);
     });
   });
 

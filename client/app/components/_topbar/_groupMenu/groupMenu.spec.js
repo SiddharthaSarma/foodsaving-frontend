@@ -4,6 +4,7 @@ const { module } = angular.mock;
 
 describe("GroupMenu", () => {
   beforeEach(module(GroupMenuModule));
+  beforeEach(module({ translateFilter: (a) => a }));
 
   let $log;
   beforeEach(inject(($injector) => {
@@ -65,6 +66,27 @@ describe("GroupMenu", () => {
       expect($ctrl.groups[0]).to.deep.equal({ id: 85 });
     });
 
+    it("gets data on menu open", () => {
+      let $ctrl = $componentController("groupMenu", {});
+      sinon.stub($ctrl.GroupService, "listMy");
+      $ctrl.GroupService.listMy.returns($q.resolve([{ id: 85 }]));
+      let $mdMenu = { open: sinon.stub() };
+      $ctrl.open($mdMenu, "event");
+      $rootScope.$apply();
+      expect($ctrl.GroupService.listMy).to.have.been.called;
+      expect($ctrl.groups[0]).to.deep.equal({ id: 85 });
+      expect($mdMenu.open).to.have.been.calledWith("event");
+    });
+
+    it("filters groups", () => {
+      let $ctrl = $componentController("groupMenu", {});
+      expect($ctrl.getGroups()).to.deep.equal([]);
+      $ctrl.groups = [{ id: 5 }, { id: 6 }];
+      expect($ctrl.getGroups()).to.deep.equal($ctrl.groups);
+      $ctrl.CurrentGroup.value.id = 5;
+      expect($ctrl.getGroups()).to.deep.equal([{ id: 6 }]);
+    });
+
     it("gets group name from CurrentGroup", () => {
       let $ctrl = $componentController("groupMenu", {});
       $ctrl.CurrentGroup.value = { name: "my group" };
@@ -81,6 +103,18 @@ describe("GroupMenu", () => {
     it("can't get group name", () => {
       let $ctrl = $componentController("groupMenu", {});
       expect($ctrl.getGroupName()).to.be.undefined;
+    });
+  });
+
+  describe("Component", () => {
+    let $compile, scope;
+    beforeEach(inject(($rootScope, $injector) => {
+      $compile = $injector.get("$compile");
+      scope = $rootScope.$new();
+    }));
+
+    it("compiles component", () => {
+      $compile("<group-menu></group-menu>")(scope);
     });
   });
 });

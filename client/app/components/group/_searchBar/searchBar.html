@@ -1,8 +1,8 @@
-<md-button class="md-primary" ng-click="$ctrl.toggleSearch()" ng-hide="$ctrl.showSearch">
-  <i style="font-size: 1.2em;" class="fa fa-search"></i>
+<md-button class="md-primary md-icon-button" ng-click="$ctrl.toggleSearch()" ng-hide="$ctrl.showSearch">
+  <md-icon style="font-size: 1.2em;" md-font-icon="fa fa-search"></md-icon>
 </md-button>
 <div ng-class="$ctrl.showSearch ? 'search-shown' : 'search-not-shown'" class="search">
   <md-input-container md-no-float class="md-block" style="margin: 0">
-    <input id="search-bar" ng-model="$ctrl.searchQuery" ng-blur="$ctrl.searchEntryDone()" placeholder="Search">
+    <input id="search-bar" ng-model="$ctrl.searchQuery" ng-blur="$ctrl.searchEntryDone()" placeholder="{{ 'BUTTON.SEARCH' | translate }}">
   </md-input-container>
 </div>

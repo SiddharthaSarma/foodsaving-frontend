@@ -14,11 +14,10 @@ describe("CurrentGroup service", () => {
     $log.assertEmpty();
   });
 
-  let CurrentGroup, SessionUser, $httpBackend;
+  let CurrentGroup, $httpBackend;
 
   beforeEach(inject(($injector) => {
     CurrentGroup = $injector.get("CurrentGroup");
-    SessionUser = $injector.get("SessionUser");
     $httpBackend = $injector.get("$httpBackend");
 
     sinon.stub(CurrentGroup, "persistCurrentGroup");
@@ -59,9 +58,9 @@ describe("CurrentGroup service", () => {
     expect(CurrentGroup.value).to.equal(value);
   });
 
-  it("can persist current group", () => {
+  it("can persist current group", inject(($q) => {
     CurrentGroup.persistCurrentGroup.restore();
-    SessionUser.set({ id: 1 });
+    sinon.stub(CurrentGroup.Authentication, "update").returns($q.resolve({ id: 1 }));
     let user = {
       id: 1,
       current_group: 4              //eslint-disable-line
@@ -69,6 +68,35 @@ describe("CurrentGroup service", () => {
     $httpBackend.expectPATCH(`/api/users/${user.id}/`, user).respond(200, {});
     CurrentGroup.persistCurrentGroup(user.current_group);
     $httpBackend.flush();
-  });
+  }));
+
+  it("sets map overview mode", inject(($rootScope) => {
+    // default is true
+    expect(CurrentGroup.map.overview).to.be.truthy;
+
+    // does it trigger a watch?
+    let stub = sinon.stub();
+    let deregister = $rootScope.$watch(() => CurrentGroup.map.overview, stub);
+    CurrentGroup.setMapOverview();
+    $rootScope.$apply();
+
+    expect(CurrentGroup.map.overview).to.be.truthy;
+    expect(stub).to.have.been.calledWith(2);
+    deregister();
+  }));
+
+  it("sets map center", inject(($rootScope) => {
+    // does it trigger a watch?
+    let stub = sinon.stub();
+    let deregister = $rootScope.$watch(() => CurrentGroup.map.center, stub);
+    let center = { lat: 1, lng: 2, zoom: 15 };
+    CurrentGroup.setMapCenter(center);
+    $rootScope.$apply();
+
+    expect(CurrentGroup.map.overview).to.be.falsy;
+    expect(CurrentGroup.map.center).to.deep.equal(center);
+    expect(stub).to.have.been.calledWith(center);
+    deregister();
+  }));
 
 });

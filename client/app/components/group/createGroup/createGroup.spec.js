@@ -4,6 +4,19 @@ const { module } = angular.mock;
 
 describe("CreateGroup", () => {
   beforeEach(module(CreateGroupModule));
+  beforeEach(module({
+    $translate: sinon.stub(),
+    $mdToast: { showSimple: sinon.stub() }
+  }));
+  beforeEach(module(($stateProvider) => {
+    $stateProvider
+      .state("main", { url: "", abstract: true })
+      .state("login", { url: "login" });
+  }));
+
+  beforeEach(inject(($translate, $q) => {
+    $translate.returns($q.resolve());
+  }));
 
   let $log;
   beforeEach(inject(($injector) => {
@@ -44,5 +57,36 @@ describe("CreateGroup", () => {
       $httpBackend.flush();
       expect($ctrl.$state.go).to.have.been.calledWith("group", { groupId: 987 });
     });
+  });
+
+  describe("Component", () => {
+    let $compile, scope;
+    beforeEach(inject(($rootScope, $injector) => {
+      $compile = $injector.get("$compile");
+      scope = $rootScope.$new();
+    }));
+
+    it("compiles component", () => {
+      $compile("<create-group></create-group>")(scope);
+    });
+  });
+
+  describe("Route", () => {
+    it("stays on route if logged in", inject((Authentication, $q, $rootScope, $state) => {
+      sinon.stub(Authentication, "update").returns($q.resolve({ id: 1 }));
+      $state.go("createGroup");
+      $rootScope.$apply();
+      expect($state.current.name).to.equal("createGroup");
+    }));
+
+    it("redirects to login if not logged in", inject((Authentication, $q, $rootScope, $state) => {
+      // ignore error log
+      $state.defaultErrorHandler(() => {});
+
+      sinon.stub(Authentication, "update").returns($q.reject());
+      $state.go("createGroup");
+      $rootScope.$apply();
+      expect($state.current.name).to.equal("login");
+    }));
   });
 });

@@ -19,7 +19,8 @@ class pickupEditCreateController {
   $onInit() {
     Object.assign(this, {
       isSeries: this.data.series,
-      mode: this.data.series ? "series" : "single"
+      mode: this.data.series ? "series" : "single",
+      minPickupDate: moment().toDate() // Setting today's date as minimum pickup date.
     });
 
     let keys = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
@@ -37,7 +38,8 @@ class pickupEditCreateController {
       this.pickupData = {
         id: this.data.editData.id,
         "max_collectors": this.data.editData.max_collectors,
-        store: this.data.editData.store
+        store: this.data.editData.store,
+        description: this.data.editData.description
       };
 
       this.time = new Date();

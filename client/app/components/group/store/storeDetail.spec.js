@@ -1,7 +1,5 @@
 import StoreDetailModule from "./storeDetail";
-import StoreDetailController from "./storeDetail.controller";
-import StoreDetailComponent from "./storeDetail.component";
-import StoreDetailTemplate from "./storeDetail.html";
+import StorePickupsModule from "./storePickups/storePickups";
 import GroupComponentModule from "../group";
 
 const { module } = angular.mock;
@@ -9,9 +7,18 @@ const { module } = angular.mock;
 describe("StoreDetail", () => {
   beforeEach(module(StoreDetailModule));
   beforeEach(module(GroupComponentModule));
+  beforeEach(module(StorePickupsModule));  // to test redirection
   beforeEach(module(($stateProvider) => {
     $stateProvider
-      .state("main", { url: "", abstract: true });
+      .state("main", { url: "", abstract: true })
+      .state("groupInfo", { url: "g" });
+  }));
+  beforeEach(module({
+    $translate: sinon.stub(),
+    translateFilter: (a) => a
+  }));
+  beforeEach(module(($mdAriaProvider) => {
+    $mdAriaProvider.disableWarnings();
   }));
 
   let $log, $httpBackend, $state;
@@ -35,38 +42,41 @@ describe("StoreDetail", () => {
   });
 
   describe("Routes", () => {
-    let groupData = {
-      id: 1
-    };
-    let storeData = {
-      id: 25,
-      group: groupData.id
-    };
+    it("should load store and group information", () => {
+      inject((CurrentGroup, GroupService, Store, $q, CurrentStores, $rootScope, Authentication, $translate) => {
+        $translate.returns($q.resolve());
+        let groupData = { id: 12, members: [43] };
+        let storeData = { id: 25, group: groupData.id };
 
-    it("should load store information", () => {
-      inject((CurrentGroup) => {
-        // We don't want the side effects of the "group" state persisting the group
-        // It would be better to stub the whole "group" state, but I don't know how
-        sinon.stub(CurrentGroup, "set");
+        $httpBackend.whenGET(`/api/groups/${groupData.id}/`).respond(groupData);
+        sinon.stub(CurrentGroup, "set").returns($q.resolve(groupData));
+        sinon.stub(Store, "get").returns($q.resolve(storeData));
+        sinon.stub(Authentication, "update").returns($q.resolve({ id: 43 }));
+        $rootScope.$apply();
+        expect(
+          $state.go("group.store", { storeId: storeData.id, groupId: groupData.id })
+        ).to.eventually.be.fulfilled;
+        $httpBackend.flush();
+        expect($state.current.component).to.equal("storePickups");
+        expect(CurrentGroup.set).to.have.been.calledWith(groupData);
+        expect(Store.get).to.have.been.calledWith(storeData.id);
+        expect(CurrentStores.selected).to.deep.equal(storeData);
       });
-      $httpBackend.expectGET(`/api/groups/${groupData.id}/`).respond(groupData);
-      $httpBackend.expectGET(`/api/stores/${storeData.id}/`).respond(storeData);
-      $state.go("group.store", { storeId: storeData.id, groupId: groupData.id });
-      $httpBackend.flush();
-      expect($state.current.component).to.equal("storeDetail");
+
     });
   });
 
   describe("Component", () => {
-    // component/directive specs
-    let component = StoreDetailComponent;
+    let $compile, scope;
+    beforeEach(inject(($rootScope, $injector) => {
+      $compile = $injector.get("$compile");
+      scope = $rootScope.$new();
+    }));
 
-    it("includes the intended template", () => {
-      expect(component.template).to.equal(StoreDetailTemplate);
-    });
-
-    it("invokes the right controller", () => {
-      expect(component.controller).to.equal(StoreDetailController);
+    it("compiles component", () => {
+      $httpBackend.expectGET("/api/stores/").respond([]);
+      $compile("<store-detail></store-detail>")(scope);
+      $httpBackend.flush();
     });
   });
 });

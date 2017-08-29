@@ -9,12 +9,20 @@
 */
 export default class CurrentGroup {
 
-  constructor(User, SessionUser) {
+  constructor(User, Authentication) {
     "ngInject";
     Object.assign(this, {
       value: {},
       User,
-      SessionUser
+      Authentication,
+      map: {
+        overview: 1,
+        center: undefined,
+        options: {
+          showStores: true,
+          showUsers: false
+        }
+      }
     });
   }
 
@@ -28,8 +36,17 @@ export default class CurrentGroup {
     this.persistCurrentGroup(null);
   }
 
+  setMapOverview() {
+    this.map.overview++;  // a truthy, changing value to trigger the watch in groupMap
+  }
+
+  setMapCenter(center) {
+    this.map.overview = 0;
+    this.map.center = angular.copy(center);  // trigger watch in groupMap
+  }
+
   persistCurrentGroup(groupId) {
-    this.SessionUser.loaded.then((user) => {
+    this.Authentication.update().then((user) => {
       this.User.save({
         id: user.id,
         current_group: groupId  //eslint-disable-line

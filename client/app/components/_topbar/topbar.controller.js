@@ -1,18 +1,15 @@
 class TopbarController {
-  constructor(Authentication, SessionUser, $state, $mdMedia, $scope, $mdSidenav) {
+  constructor(Authentication, SessionUser, $window, ScreenSize, $scope, $rootScope, $mdSidenav) {
     "ngInject";
-    $scope.screenIsSmall = !$mdMedia("gt-sm");
-    $scope.$watch(() => {
-      return $mdMedia("gt-sm");
-    }, (big) => {
-      $scope.screenIsSmall = !big;
-    });
 
     Object.assign(this, {
       Authentication,
       SessionUser,
-      $state,
-      $mdSidenav
+      ScreenSize,
+      $mdSidenav,
+      $scope,
+      $rootScope,
+      reloadPage: () => $window.location.reload()  // makes it easier to stub
     });
   }
 
@@ -20,14 +17,24 @@ class TopbarController {
     this.Authentication.update();
   }
 
-  toggleRight() {
-    this.$mdSidenav("right").toggle();
+  openSidenav() {
+    this.listeners = [];
+    this.$mdSidenav("left").onClose(() => this.listeners.map((deregister) => deregister()));
+    return this.$mdSidenav("left")
+      .open()
+      .then(() => {
+        let close = () => this.$mdSidenav("left").close();
+        this.listeners = [
+          this.$scope.$on("$locationChangeStart", close),
+          this.$rootScope.$on("$translateChangeSuccess", close)
+        ];
+      });
   }
 
   logOut(){
     this.Authentication.logout()
       .then(() => {
-        this.$state.go("login");
+        this.reloadPage();
       }, () => {
         //Logout failed!
       });

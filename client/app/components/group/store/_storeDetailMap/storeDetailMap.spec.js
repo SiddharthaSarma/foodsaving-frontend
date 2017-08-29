@@ -45,5 +45,24 @@ describe("StoreDetailMap", () => {
         pin: { lat: 1.99, lng: 2.99, message: "test1", draggable: false }
       });
     });
+
+    it("checks if marker exists", inject(($componentController) => {
+      let $ctrl = $componentController("storeDetailMap", {});
+      expect($ctrl.hasMarker()).to.be.false;
+      $ctrl.markers[1] = {};
+      expect($ctrl.hasMarker()).to.be.true;
+    }));
+  });
+
+  describe("Component", () => {
+    let $compile, scope;
+    beforeEach(inject(($rootScope, $injector) => {
+      $compile = $injector.get("$compile");
+      scope = $rootScope.$new();
+    }));
+
+    it("compiles component", () => {
+      $compile("<store-detail-map></store-detail-map>")(scope);
+    });
   });
 });

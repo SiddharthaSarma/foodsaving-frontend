@@ -4,6 +4,13 @@ const { module } = angular.mock;
 
 describe("GroupEdit", () => {
   beforeEach(module(GroupEditModule));
+  beforeEach(module({ translateFilter: (a) => a }));
+  beforeEach(module(($stateProvider) => {
+    // fake state hierarchy for ui-sref='^'
+    $stateProvider
+    .state("parent", { url: "/" })
+    .state("parent.child", { url: "/child" });
+  }));
 
   let $log;
   beforeEach(inject(($injector) => {
@@ -43,6 +50,20 @@ describe("GroupEdit", () => {
       sinon.stub($ctrl.$state, "go");
       $httpBackend.flush();
       expect($ctrl.$state.go).to.have.been.calledWith("^");
+    });
+  });
+
+  describe("Component", () => {
+    let $compile, scope;
+    beforeEach(inject(($rootScope, $injector,$state) => {
+      $compile = $injector.get("$compile");
+      scope = $rootScope.$new();
+      $state.go("parent.child");
+      $rootScope.$apply();
+    }));
+
+    it("compiles component", () => {
+      $compile("<group-edit></group-edit>")(scope);
     });
   });
 });

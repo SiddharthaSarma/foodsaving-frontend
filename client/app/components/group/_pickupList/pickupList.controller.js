@@ -2,7 +2,7 @@ import moment from "moment";
 
 class PickupListController {
 
-  constructor(SessionUser, PickupDate, PickupDateSeries, Store, $mdDialog, $document) {
+  constructor(SessionUser, PickupDate, PickupDateSeries, Store, $mdDialog, $document, ScreenSize) {
     "ngInject";
     Object.assign(this, {
       SessionUser,
@@ -10,7 +10,8 @@ class PickupListController {
       PickupDateSeries,
       Store,
       $mdDialog,
-      $document
+      $document,
+      ScreenSize
     });
   }
 
@@ -35,7 +36,7 @@ class PickupListController {
   }
 
   updatePickups() {
-    let promise = {};
+    let promise;
     if (angular.isDefined(this.groupId)) {
       promise = this.PickupDate.listByGroupId(this.groupId);
     } else if (angular.isDefined(this.storeId)) {
@@ -47,20 +48,20 @@ class PickupListController {
     });
   }
 
-/**
- * checks if a pickup is already full
- * @param {Object} pickup - pickup to check
- * @return true or false
- */
+  /**
+   * checks if a pickup is already full
+   * @param {Object} pickup - pickup to check
+   * @return true or false
+   */
   isFull(pickup) {
     return  !(pickup.collector_ids.length < pickup.max_collectors);
   }
 
-/**
- * checks if user is member of this pickup
- * @param {Object} pickup - pickup to check
- * @return true or false
- */
+  /**
+   * checks if user is member of this pickup
+   * @param {Object} pickup - pickup to check
+   * @return true or false
+   */
   isUserMember(pickup){
     return pickup.collector_ids.indexOf(this.SessionUser.value.id) !== -1;
   }
@@ -100,21 +101,21 @@ class PickupListController {
         return this.PickupDate.delete(pickup.id);
       }
     }).then(
-    () => {
-      if (this.isDeleteSeries) {
-        this.allPickups = this.allPickups.filter((pickup) => {
-          return pickup.series !== this.pickupToDelete.series;
-        });
-      } else {
-        let index = this.allPickups.indexOf(this.pickupToDelete);
-        this.allPickups.splice(index, 1);
-      }
-      this.isDeleteSeries = false;
-    })
+      () => {
+        if (this.isDeleteSeries) {
+          this.allPickups = this.allPickups.filter((pickup) => {
+            return pickup.series !== this.pickupToDelete.series;
+          });
+        } else {
+          let index = this.allPickups.indexOf(this.pickupToDelete);
+          this.allPickups.splice(index, 1);
+        }
+        this.isDeleteSeries = false;
+      })
     .catch(() => {});
   }
 
-  openCreatePickupPanel($event) {
+  openEditPickupPanel($event, pickup) {
     let DialogController = function (data) {
       "ngInject";
       this.data = data;
@@ -127,19 +128,15 @@ class PickupListController {
       locals: {
         data: {
           storeId: this.storeId,
-          series: false
+          series: false,
+          editData: angular.copy(pickup)
         }
       },
       controller: DialogController,
       controllerAs: "$ctrl"
-    }).then((data) => {
-      if (data.start_date) {
-        // workaround: reload complete list if series was created
-        this.updatePickups();
-      } else {
-        this.allPickups.push(data);
-      }
-    });
+    }).then((response) => {
+      angular.copy(response, pickup);
+    }).catch();
   }
 
   joinPickup(pickupId) {

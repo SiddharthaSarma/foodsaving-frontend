@@ -8,6 +8,7 @@ describe("PickupListItem", () => {
   beforeEach(module(PickupListItemModule));
   beforeEach(module("PickupDate"));
   beforeEach(module("User"));
+  beforeEach(module({ translateFilter: (a) => a }));
 
   beforeEach(inject(($injector) => {
     $log = $injector.get("$log");
@@ -51,7 +52,7 @@ describe("PickupListItem", () => {
 
     it("gets store data", () => {
       $ctrl.CurrentStores.set([{ id: 5 }]);
-      $ctrl.data = { store: 5 };
+      $ctrl.data = { store: 5, "collector_ids": [] };
       $ctrl.$onInit();
       expect($ctrl.storeData).to.deep.equal({ id: 5 });
     });
@@ -65,4 +66,28 @@ describe("PickupListItem", () => {
     });
   });
 
+  describe("Controller with store detail", () => {
+    let $ctrl;
+
+    beforeEach(() => {
+      $ctrl = $componentController("pickupListItem", {
+      }, {
+        data: pickupData,
+        showDetail: "store"
+      });
+      $ctrl.$onInit();
+    });
+  });
+
+  describe("Component", () => {
+    let $compile, scope;
+    beforeEach(inject(($rootScope, $injector) => {
+      $compile = $injector.get("$compile");
+      scope = $rootScope.$new();
+    }));
+
+    it("compiles component", () => {
+      $compile("<pickup-list-item data='{store:{}, collector_ids:[]}'></pickup-list-item>")(scope);
+    });
+  });
 });

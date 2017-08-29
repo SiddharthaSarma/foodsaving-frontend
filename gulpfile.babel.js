@@ -18,7 +18,7 @@ import webpackHotMiddelware from "webpack-hot-middleware";
 import colorsSupported      from "supports-color";
 import historyApiFallback   from "connect-history-api-fallback";
 
-const BACKEND = process.env.BACKEND || "https://foodsaving.world/";
+const BACKEND = process.env.BACKEND || "https://dev.foodsaving.world/";
 
 let root = "client";
 
@@ -89,7 +89,7 @@ gulp.task("stylint", () => {
   ])
     .pipe(stylint({ config: ".stylintrc" }))
     .pipe(stylint.reporter())
-    .pipe(stylint.reporter("fail"));
+    .pipe(stylint.reporter("fail", { failOnWarning: true }));
 });
 
 gulp.task("eslint", () => {
@@ -124,6 +124,7 @@ gulp.task("serve", () => {
       proxy("/api", {
         target: BACKEND,
         changeOrigin: true,
+        ws: true,
         onProxyReq: (proxyReq) => {
           if (/^https:/.test(BACKEND)) {
             // For secure backends we must set the referer to make django happy
@@ -152,6 +153,9 @@ gulp.task("serve", () => {
 gulp.task("watch", ["serve"]);
 
 gulp.task("component", () => {
+  const dash = (val) => {
+    return val.replace(/[A-Z]/g, (c) => "-" + c.toLowerCase());
+  };
   const cap = (val) => {
     return val.charAt(0).toUpperCase() + val.slice(1);
   };
@@ -162,6 +166,7 @@ gulp.task("component", () => {
   return gulp.src(paths.blankTemplates(temp))
     .pipe(template({
       name,
+      dashedName: dash(name),
       upCaseName: cap(name)
     }))
     .pipe(rename((path) => {
@@ -171,6 +176,9 @@ gulp.task("component", () => {
 });
 
 gulp.task("page", () => {
+  const dash = (val) => {
+    return val.replace(/[A-Z]/g, (c) => "-" + c.toLowerCase());
+  };
   const cap = (val) => {
     return val.charAt(0).toUpperCase() + val.slice(1);
   };
@@ -181,6 +189,7 @@ gulp.task("page", () => {
   return gulp.src(paths.blankTemplates(generator))
     .pipe(template({
       name,
+      dashedName: dash(name),
       upCaseName: cap(name)
     }))
     .pipe(rename((path) => {

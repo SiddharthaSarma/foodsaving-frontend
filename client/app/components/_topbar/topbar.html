@@ -1,5 +1,12 @@
-<md-toolbar class="md-medium-small md-whiteframe-3dp">
-  <div ng-if="!$ctrl.SessionUser.isLoggedIn()" class="md-toolbar-tools" layout="row">
+<md-toolbar ng-if="!$ctrl.SessionUser.isLoggedIn()" class="md-medium-small md-whiteframe-3dp">
+  <div class="md-toolbar-tools" layout="row">
+    <md-button
+      ng-if="!$ctrl.ScreenSize.isGtSm()"
+      aria-label="Navigation"
+      ng-click="$ctrl.openSidenav()"
+      class="md-icon-button">
+      <i class="fa fa-fw fa-bars"></i>
+    </md-button>
     <md-button class="md-icon-button" ui-sref="landingPage">
       <i class="fa fa-home"></i>
       <md-tooltip>
@@ -7,7 +14,7 @@
       </md-tooltip>
     </md-button>
 
-    <div ng-if="!screenIsSmall" layout="row" flex>
+    <div ng-if="$ctrl.ScreenSize.isGtSm()" layout="row" flex>
       <language-chooser></language-chooser>
       <md-button href="https://github.com/yunity/foodsaving-frontend">
         <i class="fa fa-github"></i>
@@ -31,82 +38,85 @@
         </md-tooltip>
       </md-button>
       <span flex></span>
-      <md-button ui-sref="login">
+      <md-button ng-hide="'login' | isState" ui-sref="login">
         <span translate="LOGIN.TITLE"></span>
       </md-button>
     </div>
-
-    <div ng-if="screenIsSmall" layout="row" flex>
-      <span flex></span>
-      <md-button aria-label="Navigation" ng-click="$ctrl.toggleRight()" class="md-icon-button">
-        <i class="fa fa-fw fa-bars"></i>
-      </md-button>
-    </div>
   </div>
+</md-toolbar>
 
-  <div ng-if="$ctrl.SessionUser.isLoggedIn()" class="md-toolbar-tools" layout="row" layout-align="space-between center">
+<md-toolbar ng-if="$ctrl.SessionUser.isLoggedIn()" class="md-medium-small md-whiteframe-3dp logged-in">
+  <div class="md-toolbar-tools" layout="row" layout-align="space-between center">
     <span flex="5" hide-xs></span>
+
+    <md-button ng-if="!$ctrl.ScreenSize.isGtSm()" aria-label="Navigation" ng-click="$ctrl.openSidenav()" class="md-icon-button">
+      <i class="fa fa-fw fa-bars"></i>
+    </md-button>
+
+    <md-button hide-xs class="md-icon-button" ui-sref="landingPage">
+      <i class="fa fa-home"></i>
+      <md-tooltip>
+        Foodsaving Worldwide
+      </md-tooltip>
+    </md-button>
+
     <group-menu style="min-width: 50%" flex></group-menu>
 
-    <div ng-if="!screenIsSmall" layout="row">
+    <div ng-if="$ctrl.ScreenSize.isGtSm()" layout="row">
       <language-chooser></language-chooser>
       <md-button class="no-transform" ui-sref="userDetail({id: $ctrl.SessionUser.value.id})" aria-label="{{ 'TOPBAR.USERPROFILE' | translate }}">
         <i class="fa fa-user"></i>
         {{ $ctrl.SessionUser.value.display_name }}
         <md-tooltip>
-            <span translate="TOPBAR.USERPROFILE"></span>
+          <span translate="TOPBAR.USERPROFILE"></span>
         </md-tooltip>
       </md-button>
 
       <md-button class="no-transform" ui-sref="notifications">
         <i class="fa fa-bell-o"></i>
         <md-tooltip>
-            <span translate="NOTIFICATIONS.TITLE"></span>
+          <span translate="NOTIFICATIONS.TITLE"></span>
         </md-tooltip>
       </md-button>
 
       <md-button ng-click="$ctrl.logOut()" class="md-icon-button" aria-label="{{ 'TOPBAR.LOGOUT' | translate }}">
-        <i class="fa fa-fw fa-sign-out"></i>
+        <i class="fa fa-sign-out"></i>
         <md-tooltip>
-            <span translate="TOPBAR.LOGOUT"></span>
+          <span translate="TOPBAR.LOGOUT"></span>
         </md-tooltip>
       </md-button>
     </div>
-
-    <md-button ng-if="screenIsSmall" aria-label="Navigation" ng-click="$ctrl.toggleRight()" class="md-icon-button">
-      <i class="fa fa-fw fa-bars"></i>
-    </md-button>
 
     <span flex="5"></span>
   </div>
 </md-toolbar>
 <!--<div ncy-breadcrumb></div>-->
 
-<md-sidenav class="md-sidenav-right md-whiteframe-4dp" md-component-id="right">
+<md-sidenav class="md-sidenav-left md-whiteframe-4dp" md-component-id="left" style="z-index: 100">
   <div ng-if="!$ctrl.SessionUser.isLoggedIn()" layout-padding>
     <md-menu-content width="4">
       <md-menu-item>
+        <md-button class="no-transform" ui-sref="landingPage">
+          <i class="fa fa-home"></i>
+          Foodsaving Worldwide
+        </md-button>
+      </md-menu-item>
+      <md-menu-item>
         <md-button href="https://github.com/yunity/foodsaving-frontend">
-          <i class="fa fa-github"></i>
+          <i class="fa fa-fw fa-github"></i>
           Github
-          <md-tooltip>
-            <span translate="GLOBAL.GITHUB_NOTE"></span>
-          </md-tooltip>
         </md-button>
       </md-menu-item>
       <md-menu-item>
         <md-button class="no-transform" ng-href="mailto:fstool@yunity.org">
-          <i class="fa fa-envelope"></i>
+          <i class="fa fa-fw fa-envelope"></i>
           fstool@yunity.org
-          <md-tooltip>
-            <span translate="GLOBAL.DEVMAIL_NOTE"></span>
-          </md-tooltip>
         </md-button>
       </md-menu-item>
       <language-chooser></language-chooser>
       <hr style="padding:0">
       <md-menu-item>
-        <md-button ng-click="$ctrl.toggleRight()" aria-label="{{ 'TOPBAR.LOGOUT' | translate }}" ui-sref="login">
+        <md-button aria-label="{{ 'TOPBAR.LOGOUT' | translate }}" ui-sref="login">
           <span translate="LOGIN.TITLE"></span>
         </md-button>
       </md-menu-item>
@@ -120,24 +130,33 @@
   <div ng-if="$ctrl.SessionUser.isLoggedIn()" layout-padding>
     <md-menu-content width="4">
       <md-menu-item>
-        <md-button ng-click="$ctrl.toggleRight()" class="no-transform" ui-sref="userDetail({id: $ctrl.SessionUser.value.id})" aria-label="{{ 'TOPBAR.USERPROFILE' | translate }}">
-          <i class="fa fa-user"></i>
+        <md-button class="no-transform" ui-sref="landingPage">
+          <i class="fa fa-home"></i>
+          Foodsaving Worldwide
+        </md-button>
+      </md-menu-item>
+      <md-menu-item>
+        <md-button class="no-transform" ui-sref="userDetail({id: $ctrl.SessionUser.value.id})" aria-label="{{ 'TOPBAR.USERPROFILE' | translate }}">
+          <i class="fa fa-fw fa-user"></i>
           <span translate="TOPBAR.USERPROFILE"></span>
         </md-button>
       </md-menu-item>
       <md-menu-item>
-        <md-button ng-click="$ctrl.toggleRight()" class="no-transform" ui-sref="notifications">
-          <i class="fa fa-bell-o"></i>
+        <md-button class="no-transform" ui-sref="notifications">
+          <i class="fa fa-fw fa-bell-o"></i>
           <span translate="NOTIFICATIONS.TITLE"></span>
         </md-button>
       </md-menu-item>
       <md-menu-item>
         <md-button ng-click="$ctrl.logOut()" aria-label="{{ 'TOPBAR.LOGOUT' | translate }}">
-          <i class="fa fa-fw fa-sign-out"></i>
+          <i class="fa fa-fw fa-fw fa-sign-out"></i>
           <span translate="TOPBAR.LOGOUT"></span>
         </md-button>
       </md-menu-item>
     </md-menu-content>
+    <hr style="padding:0">
+    <h3 translate="GROUP.STORES" style="margin-bottom:0"></h3>
+    <store-list group-id="$ctrl.groupData.id" style="padding: 0"></store-list>
     <hr style="padding:0">
     <language-chooser></language-chooser>
   </div>

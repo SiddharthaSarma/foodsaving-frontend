@@ -10,8 +10,12 @@ import topbar from "./_topbar/topbar";
 import landingPage from "./landingPage/landingPage";
 import notifications from "./notifications/notifications";
 import groupInfo from "./groupInfo/groupInfo";
+import groupList from "./_groupList/groupList";
+import mapPicker from "./_mapPicker/mapPicker";
+import joinGroupList from "./joinGroupList/joinGroupList";
 import mainLayout from "./_mainLayout/mainLayout";
 import splashLayout from "./_splashLayout/splashLayout";
+import notFound from "./notFound/notFound";
 
 let componentModule = angular.module("app.components", [
   group,
@@ -25,8 +29,12 @@ let componentModule = angular.module("app.components", [
   landingPage,
   notifications,
   groupInfo,
+  groupList,
+  mapPicker,
+  joinGroupList,
   mainLayout,
-  splashLayout
+  splashLayout,
+  notFound
 ]).name;
 
 export default componentModule;

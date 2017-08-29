@@ -1,7 +1,7 @@
 import angular from "angular";
 import uiRouter from "@uirouter/angularjs";
 import storeEditComponent from "./storeEdit.component";
-import storeService from "../../../../services/store/store";
+import storeService from "services/store/store";
 import storeEditCreateForm from "../_storeEditCreateForm/storeEditCreateForm";
 
 let storeEditModule = angular.module("storeEdit", [
@@ -20,8 +20,9 @@ let storeEditModule = angular.module("storeEdit", [
       url: "/store/{storeId:int}/edit",
       component: "storeEdit",
       resolve: {
-        storedata: (Store, $stateParams) => {
-          return Store.get($stateParams.storeId);
+        storedata: (Store, $stateParams, $state) => {
+          return Store.get($stateParams.storeId)
+            .catch(() => $state.go("login"));
         }
       },
       ncyBreadcrumb: {

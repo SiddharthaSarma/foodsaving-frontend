@@ -6,7 +6,8 @@
     "WARNING": "Warning",
     "BETA_WARNING": "This website is under active development and everything is subject to change. We can't guarantee for the safety and privacy of the data you enter (but we try our best).",
     "CONNECTION_INTERRUPTED": "Error: connection interrupted!",
-    "SERVER_ERROR": "Server error"
+    "SERVER_ERROR": "Server error",
+    "NOT_LOGGED_IN": "Not logged in"
   },
   "ACTION_NOTICE": {
     "TITLE": "Call for collaboration!",
@@ -23,7 +24,8 @@
   "USERDATA": {
     "EMAIL": "Mail",
     "PASSWORD": "Password",
-    "USERNAME": "Name"
+    "USERNAME": "Name",
+    "WHERE_FROM": "Where you are from (not required)"
   },
   "BUTTON": {
     "CREATE": "Create",
@@ -33,7 +35,10 @@
     "JOIN": "Join",
     "LEAVE": "Leave",
     "PREVIEW": "Preview",
-    "BACK": "Back"
+    "BACK": "Back",
+    "MORE_OPTIONS": "More options",
+    "SUBMIT": "Submit",
+    "SEARCH": "Search"
   },
   "FORM": {
     "MINLENGTH": "Please enter more than {{min}} characters.",
@@ -55,7 +60,19 @@
     "HISTORY": "History",
     "DESCRIPTION": "Description",
     "ADDRESS": "Address",
-    "TIMEZONE": "Time zone of group"
+    "TIMEZONE": "Time zone of group",
+    "INVITE_EMAIL": "Enter an e-mail address",
+    "INVITE_SEND": "Send invitation",
+    "INVITED_LIST": "Invitations have already been sent out to these e-mail addresses:",
+    "ALREADY_INVITED": "An invitation has already been sent to this e-mail address",
+    "INVITE_TITLE": "Invite users to your group"
+  },
+  "GROUPMAP": {
+    "TITLE": "Map",
+    "SHOW_USERS": "Show users",
+    "HIDE_USERS": "Hide users",
+    "SHOW_STORES": "Show stores",
+    "HIDE_STORES": "Hide stores"    
   },
   "STOREDETAIL": {
     "EDIT": "Edit store",
@@ -100,7 +117,9 @@
     "NO_PUBLIC_DESCRIPTION": "(This group has no public description... yet)",
     "PASSWORD_LABEL": "Enter password for private group",
     "PASSWORD_REQUIRED": "This group requires a password",
-    "PASSWORD_WRONG": "You entered the wrong password"
+    "PASSWORD_WRONG": "You entered the wrong password",
+    "ALL_GROUPS": "All groups",
+    "SIGNUP_OR_LOGIN": "Log in or sign up to join this group!"
   },
   "GROUPINFO": {
     "META": "Show public group information",
@@ -144,7 +163,8 @@
     "HINT_MULTIPLE": "You can select multiple days here, e.g. by holding the Ctrl key.",
     "TIME": "Time",
     "TIME_ERROR": "Enter a valid time, e.g. {{timeExample}}",
-    "MAX_COLLECTORS": "Max Slots"
+    "MAX_COLLECTORS": "Max Slots",
+    "COMMENT": "Additional information"
   },
   "CREATESTORE": {
     "TITLE": "Create a new store"
@@ -165,6 +185,14 @@
     },
     "NONE": "No upcoming pickups",
     "NONE_HINT": "You can create a new pickup on the store page."
+  },
+  "PICKUP_FEEDBACK": {
+    "TITLE": "Pickup feedback",
+    "HEADER": "Thank you for your pickup!",
+    "SUBTITLE": "You can provide feedback for your pickup here",
+    "AMOUNT": "Amount of food you took home (in kg)",
+    "COMMENT": "Comment",
+    "COMMENT_PLACEHOLDER": "Was everything fine? Did everyone show up? Your comment here..."
   },
   "PASSWORDRESET": {
     "TITLE": "Password reset",
@@ -199,6 +227,7 @@
     "SERIES_MODIFY": "changed the settings of a recurring pick-up",
     "SERIES_DELETE": "deleted a recurring pick-up",
     "PICKUP_DONE": "did a pick-up at {{store_name}}",
+    "PICKUP_MISSED": "A pickup at {{store_name}} was missed!",
     "PICKUP_JOIN": "signed up to do a pick-up at {{store_name}}",
     "PICKUP_LEAVE": "stepped back from doing a pick-up at {{store_name}}",
     "LOAD_MORE": "load more ...",
@@ -219,5 +248,12 @@
     "NOT_VERIFIED": "Not verified",
     "RESEND_VERIFICATION": "Resend verification",
     "VERIFICATION_EMAIL_SENT": "We sent you another verification mail. Please check your inbox."
+  },
+  "NOT_FOUND": {
+    "TITLE": "Page not found",
+    "HEADER": "Ooooooops!",
+    "SUBHEADER": "404 - Page not found",
+    "EXPLANATION": "Sorry, we couldn't find this page anywhere.",
+    "HOME": "Take me home"
   }
 }

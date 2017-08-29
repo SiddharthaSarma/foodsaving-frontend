@@ -2,39 +2,53 @@
 
 Only major features and improvements will be listed here.
 
-## [Release 3](https://github.com/yunity/foodsaving-frontend/milestone/7)
+## Current development
 
-- Setup separate deployment branch for the frontend repository
-- Modify pickup dates/series (frontend-only)
-- Public map of all groups (frontend-only)
-- Show historic pickup dates (frontend-only, but could be made better in backend)
-- Accepting a legal agreement
-- Comment field for pickup dates (for duration, distribution point, mode of transportation for pickup ...)
-- Feedback for historic pickup dates (e.g. amount of saved food)
-- search-options for storeList / memberList / joinGroup
+We are working on this either right now or pretty soon in the future. Should be implemented in the next few months.
 
-## [Release 4](https://github.com/yunity/foodsaving-frontend/milestone/9)
+- Feedback for historic pickup dates (e.g. amount of saved food) https://github.com/yunity/foodsaving-frontend/issues/159 / https://github.com/yunity/foodsaving-backend/issues/253
+- Comment field for pickup dates (for duration, distribution point, mode of transportation for pickup ...) https://github.com/yunity/foodsaving-frontend/issues/158
+- Invite people to the foodsaving tool by e-mail address https://github.com/yunity/foodsaving-frontend/issues/380
 
-- Track changes and show history (revisions) of user-defined fields to prevent abuse & accidents
-- Conversations between users and groups
+[View issues](https://github.com/yunity/foodsaving-frontend/milestone/11)
 
-## [Release 5](https://github.com/yunity/foodsaving-frontend/milestone/10)
+## Current discussion (higher priority)
 
-- Enable login via Facebook account (postponed)
+We want to work on this in mid-term future. We need to think about it more before we can implement it, so active discussion is highly welcome. Feel free to join in!
 
-## Unscheduled ideas (brainstorming)
+- Group admins https://github.com/yunity/foodsaving-frontend/issues/356
+- Accepting a legal agreement https://github.com/yunity/foodsaving-frontend/issues/324
+- Notification mails https://github.com/yunity/foodsaving-frontend/issues/257
+- Minimal viable community feature https://github.com/yunity/foodsaving-frontend/issues/539
 
-- Food sharing: food baskets, share points
+[View issues](https://github.com/yunity/foodsaving-frontend/milestone/9)
+
+## Discussion (lower priority)
+
+Quite a bit in the future (~1 year), haven't been discussed very much. If one of those is more important to you than those in "Current discussion", please contact us!
+
+- Student mode for newcomers https://github.com/yunity/foodsaving-frontend/issues/546
+- Statistics similar to foodsharing.de: total amount of  saved food per person, per group, per store https://github.com/yunity/foodsaving-frontend/issues/355
+- Locations for public food distribution https://github.com/yunity/foodsaving-frontend/issues/354
+- Food baskets for person-to-person food exchange
+
+[View issues](https://github.com/yunity/foodsaving-frontend/milestone/10)
+
+## Ideas / Brainstorming
+
+Rough ideas, have been mentioned by someone.
+
+- Public landing page for groups (improvement of groupInfo page)
+- Add "to do" events (generalized from pickup date)
 - Sharing of things: text+image with a tag system
-- Statistics (amount of saved food, number of pickups)
 - Trustworthiness rating for users
 - Undo functionality for changes
-- Introduction/trial pickups
-- Mail notifications
 - Facebook notifications
-- Discussion forum for groups
-- Group admins/trusted users
+- User profile pictures
 - Work teams for groups (foodsaving platform)
-- more login options (Google, GitHub, Slack, ...)
+- More login options (Facebook, Google, GitHub, Slack, ...)
+- Quiz
 - Native App for Android and iOS
-- Deploying Pull-Request branches to some subdomain
+- DevOps: deploying Pull-Request branches to some subdomain
+- Make foodsaving tool into a multisharing platform
+- Set up a legal entity for foodsaving.world, add terms of service

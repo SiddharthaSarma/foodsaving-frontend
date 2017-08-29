@@ -18,16 +18,15 @@ At a later point, more features could be added that support the yunity vision an
 
 Our current development goals are prioritized and written down in our [elaborate roadmap](ROADMAP.md).
 
-We are keeping the features down to a minimum (check out [that meeting's notes](https://yunity.atlassian.net/wiki/display/YUN/2016-09-13+-+Narrowing+down+features)), in order to progressively build up a useful tool.
+We are keeping the features down to a minimum, in order to progressively build up a useful tool.
 
 ## Releases
 
 Look into our [change log file](CHANGELOG.md) for a quick overview of past versions and recent changes.
 
 ### Potential users
-In future, we want our feature requests to come directly from foodsaving communities, to fulfill their needs and desires.
 
-We don't have testing communities yet: we are in touch with [existing foodsaving networks](https://yunity.atlassian.net/wiki/display/YUN/Existing+initiatives) who have shown interest in testing the tool once it presents sufficient features for them.
+Have a look [on the live site](https://foodsaving.world) for all groups that have registered so far. Not all of them are using the app right now, but we have received feature requests from them.
 
 ## Translation
 
@@ -39,32 +38,32 @@ After selecting your destination language and choosing the resource file, go ahe
 
 ## Requirements
 
-- nodejs and npm
-- gulp `npm install -g gulp`
-- chrome or chromium (for testing)
+- [Node.js](https://nodejs.org/) and [yarn](https://yarnpkg.com/en/docs/install)
+- gulp (`yarn global add gulp`)
+- chrome or [chromium](https://www.chromium.org/) (for testing)
 
-To clone and install
+To clone and install:
 
 ```
 git clone https://github.com/yunity/foodsaving-frontend.git
 cd foodsaving-frontend
-npm install
+yarn
 ```
 
-To run the local dev server
+To run the local dev server:
 
 ```
-npm run dev
+yarn run dev
 ```
 
-To lint and run the tests
+To lint and run the tests:
 
 ```
-npm run lint
-npm run test
+yarn run lint
+yarn run test
 ```
 
-If you want to use an eslint plugin for your editor, please keep in mind that you either have to install all eslint plugins listed in package.json globally or you run `npm install`. Otherwise your eslint plugin may not work.
+If you want to use an eslint plugin for your editor, please keep in mind that you either have to install all eslint plugins listed in package.json globally or you run `yarn install`. Otherwise your eslint plugin may not work.
 
 # Start contributing?
 
