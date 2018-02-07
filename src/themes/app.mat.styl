@@ -1,0 +1,87 @@
+// This file is included in the build if src/main.js imports it.
+// Otherwise the default Material CSS file is bundled.
+// Check "DEFAULT / CUSTOM STYLE" in src/main.js
+
+// App Shared Variables
+// --------------------------------------------------
+// Shared Stylus variables go in the app.variables.styl file
+@import 'app.variables'
+
+// Quasar Material Design Stylus
+// --------------------------------------------------
+// Custom App variables must be declared before importing Quasar.
+// Quasar will use its default values when a custom variable isn't provided.
+@import '~quasar-framework/dist/quasar.mat.styl'
+
+
+h1
+  font-size 2.4rem
+h2
+  font-size 2.0rem
+h3
+  font-size 1.7rem
+h4
+  font-size 1.5rem
+h5
+  font-size 1.2rem
+
+h1.generic-padding, h2.generic-padding, h3.generic-padding, h4.generic-padding, h5.generic-padding
+  padding .2em
+  padding-left .5em
+
+a
+  color inherit
+.q-card
+  background-color white
+
+body.mobile .q-card
+  margin 5px 0
+
+body.mobile .no-mobile-margin
+  margin 0
+  border-top 0
+
+.generic-padding
+  padding 1em
+
+body.mobile .generic-padding
+  padding 1em
+
+.grey-border
+  border 1px solid lightgrey
+  border-radius $borderRadius
+  background-color white
+
+.bg-neutral
+  background-color $neutral
+
+.bg-transparent
+  background rgba(0,0,0,0)
+
+.accent-font
+  font-family $accentFont
+
+.no-hover:hover
+  color: $neutral
+
+body.desktop .desktop-margin
+  margin 8px
+
+.multiline
+  white-space pre-line
+
+// For large bits of text inside a modal/dialog body (e.g. the agreement dialog)
+.modal-body
+  white-space pre-line
+
+@keyframes makeBigger
+  0%
+    transform scale(.8)
+  100%
+    transform scale(1)
+
+.hoverScale
+  animation: .3s ease-out 0s 1 makeBigger;
+  transition transform .1s ease
+.hoverScale:hover
+  transform scale(1.1)
